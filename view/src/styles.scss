@@ -1,0 +1,62 @@
+html, body { height: 100%; overflow: hidden; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+:root {
+  // --color-000: transparent;
+  // --color-100: black !important;
+  // --color-200: #717171 !important;
+  // --color-300: #808080 !important;
+  // --color-400: #B5B5B5 !important;
+  // --color-500: #D9D9D9 !important;
+  // --color-600: #C1C1C1 !important;
+  // --color-700: #CECDCD !important;
+  // --color-800: #EFEFEF !important;
+  // --color-900: #E1E1E1 !important;
+  // --color-1000: #888787 !important;
+
+  // --text-color: black;
+  // --icons-color: black;
+
+  
+  //--------------DARK----------------------
+
+  // --color-000: transparent;
+  // --color-100: white !important;
+  // --color-200: #D2D2D2 !important;
+  // --color-300: #C2C2C2 !important;
+  // --color-400: #6D6D6D !important;
+  // --color-500: #606060 !important;
+  // --color-600: #535353 !important;
+  // --color-700: #4A4A4A !important;
+  // --color-800: #424242 !important;
+  // --color-900: #333333 !important;
+  // --color-1000: #272727 !important;
+
+  // --text-color: var(--color-100);
+  // --icons-color: var(--color-100);
+}
+
+app-dev-area {
+    width: 100%;
+    height: 100%;
+}
+
+// buttons
+.button-default {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.button-confirm {
+  background-color: #86CE84;
+  color: #272727;
+  font-weight: bold;
+}
+
+.button-cancel {
+  background-color: #FF6869;
+  color: #272727;
+  font-weight: bold;
+}
