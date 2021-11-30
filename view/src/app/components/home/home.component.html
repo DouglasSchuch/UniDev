@@ -1,0 +1,24 @@
+<div style="display: flex; height: calc(100% - 45px); padding: 50px 100px; background-color: var(--color-1000);">
+    <!-- Perfil -->
+    <div class="profile">
+        <div fxFlex="20" style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+            <div class="circle">DS</div>
+        </div>
+        <div class="identification username">{{'@' + app.initialLoad.user.username}}</div>
+        <div class="identification">{{app.initialLoad.user.name + (app.initialLoad.user.age ? (', ' + app.initialLoad.user.age) : '')}}</div>
+        <div class="identification">{{app.initialLoad.user.email}}</div>
+        <div class="identification">{{app.initialLoad.user.city}}</div>
+        <div class="identification">{{app.initialLoad.user.course}}</div>
+        <div class="identification">{{app.initialLoad.user.university}}</div>
+    </div>
+
+    <!-- Módulos -->
+    <div fxFlex>
+
+    </div>
+
+    <!-- Rankings -->
+    <div style="display: flex; flex-direction: column; max-width: 300px; min-width: 200px;">
+
+    </div>
+</div>

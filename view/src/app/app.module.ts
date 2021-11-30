@@ -19,11 +19,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 
 import { DevAreaComponent } from '../app/components/dev-area/dev-area.component'
+import { HomeComponent } from '../app/components/home/home.component'
+import { LoginComponent } from '../app/components/login/login.component'
 
 @NgModule({
   declarations: [
     AppComponent,
-    DevAreaComponent
+    DevAreaComponent,
+    HomeComponent,
+    LoginComponent
   ],
   imports: [
     FlexLayoutModule,

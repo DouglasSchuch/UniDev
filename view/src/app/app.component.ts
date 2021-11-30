@@ -9,7 +9,17 @@ import { ShareService } from './services/share.service';
 export class AppComponent implements OnInit {
   title = 'UniDev';
   initialLoad: any = {
-    theme: 'dark'
+    theme: 'dark',
+    user: {
+      name: 'Douglas Schuch'
+      , username: 'DouglasSchuch'
+      , age: '25'
+      , email: 'douglasschuch2@gmail.com'
+      , password: '123'
+      , city: 'Novo Hamburgo'
+      , course: 'Sistemas de Informação'
+      , university: 'UNISINOS'
+    }
   };
   themes: any = {
     light: {

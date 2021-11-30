@@ -15,16 +15,22 @@ export class DevAreaComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [ 'input', 'output' ];
   dataIO: any[] = [{ input: 1, output: 2}, { input: 3, output: 4}, { input: 5, output: 6}, { input: 7, output: 8}, { input: 9, output: 10}]
   editor: any;
+  
+  timer: number = 0;
+  timeView: string = '00:00:00';
+  interval: any = null;
+
   @ViewChild('editorContainer', { static: true }) editorContainer: ElementRef | undefined;
 
   constructor(private share: ShareService, private cdRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.loadMonaco();
+    this.startTime();
   }
 
   ngOnDestroy(): void {
-    
+    this.clearInterval();
   }
 
   loadMonaco() {
@@ -61,10 +67,31 @@ export class DevAreaComponent implements OnInit, OnDestroy {
   initMonaco(options: any): void {
     this.editor = monaco.editor.create(this.editorContainer?.nativeElement, {
       value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
-      language: 'javascript'
+      language: 'javascript',
+      automaticLayout: true
     });
     monaco.editor.defineTheme('dark', new DevThemes().getDarkMode());
 
     this.share.theme.subscribe((theme: string) => monaco.editor.setTheme(theme));
+  }
+
+  startTime() {
+    const convert = (value: number) => {
+      return value < 10 ? ('0' + value) : value;
+    };
+    this.interval = setInterval(() => {
+      this.timer++;
+      const hours: any = Math.floor(this.timer / 3600); //get hours
+      const minutes: any = Math.floor((this.timer - (hours * 3600)) / 60); //get minutes
+      const seconds: any = this.timer - (hours * 3600) - (minutes * 60); //get seconds
+      console.log(hours, minutes, seconds);
+      this.timeView = `${convert(hours)}:${convert(minutes)}:${convert(seconds)}`; //return is HH:MM:ss
+    }, 1000);
+  }
+
+  clearInterval() {
+    clearInterval(this.interval);
+    this.timer = 0;
+    this.timeView = '00:00:00';
   }
 }
