@@ -25,15 +25,15 @@
       </div>
       
       <!-- Área do console -->
-      <div fxFlex="30" style="height: 100%; color: var(--text-color); background-color: var(--color-1000);">
+      <div fxFlex="30" style="height: 100%; color: var(--text-color); background-color: var(--color-900);">
           AREA 2
       </div>
       
       <!-- Área de confirmação -->
-      <div style="display: flex; flex-direction: row; height: 45px; color: var(--text-color); background-color: var(--color-900); align-items: center; padding: 0 10px;">
+      <div style="display: flex; flex-direction: row; height: 45px; color: var(--text-color); background-color: var(--color-1000); align-items: center; padding: 0 10px;">
         <span fxFlex>{{timeView}}</span>
-        <button mat-button mat-raised class="button-default button-cancel" style="height: 30px; margin-right: 10px;">Cancelar</button>
-        <button mat-button mat-raised class="button-default button-confirm" style="height: 30px;">Confirmar</button>
+        <button mat-button mat-raised class="button-default button-cancel" style="height: 30px; margin-right: 10px; display: flex; align-items: center;">Cancelar</button>
+        <button mat-button mat-raised class="button-default button-confirm" style="height: 30px; display: flex; align-items: center;" (click)="confirm()">Confirmar</button>
       </div>
   </div>
   

@@ -1,0 +1,12 @@
+{
+  "name": "SynecoReportsAPI",
+  "version": "1.0.0",
+  "description": "Responsavel por realizar as consultas no banco de dados",
+  "main": "syneco-reports-api/src/index.js",
+  "bin": "syneco-reports-api/src/index.js",
+  "pkg": {
+    "assets": "src/ChartsFunctions/**/*"
+  },
+  "author": "SKA Ltda.",
+  "license": "ISC"
+}

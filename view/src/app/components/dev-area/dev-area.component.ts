@@ -1,6 +1,9 @@
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DevThemes } from 'src/app/datas/dev-themes';
+import { RouteService } from 'src/app/services/route.service';
 import { ShareService } from 'src/app/services/share.service';
+import { DBResult } from '../../../../../Common/models/DBResult';
+import { Run } from '../../../../../Common/models/Run';
 
 declare var monaco: any;
 let loadedMonaco = false;
@@ -22,7 +25,7 @@ export class DevAreaComponent implements OnInit, OnDestroy {
 
   @ViewChild('editorContainer', { static: true }) editorContainer: ElementRef | undefined;
 
-  constructor(private share: ShareService, private cdRef: ChangeDetectorRef) { }
+  constructor(private share: ShareService, private cdRef: ChangeDetectorRef, private routeService: RouteService) { }
 
   ngOnInit(): void {
     this.loadMonaco();
@@ -66,8 +69,8 @@ export class DevAreaComponent implements OnInit, OnDestroy {
 
   initMonaco(options: any): void {
     this.editor = monaco.editor.create(this.editorContainer?.nativeElement, {
-      value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
-      language: 'javascript',
+      value: ['class ClassName {', '\tpublic static void main(String[] args) {', '\t\t', '\t}', '}'].join('\n'),
+      language: 'java',
       automaticLayout: true
     });
     monaco.editor.defineTheme('dark', new DevThemes().getDarkMode());
@@ -93,5 +96,12 @@ export class DevAreaComponent implements OnInit, OnDestroy {
     clearInterval(this.interval);
     this.timer = 0;
     this.timeView = '00:00:00';
+  }
+
+  confirm() {
+    this.routeService.compileAndExec(new Run(this.editor.getValue(), 1, this.timer))
+    .subscribe((resultDb: DBResult) => {
+      console.log('-----> ', resultDb);
+    });
   }
 }

@@ -1,11 +1,16 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Run } from '../../../../Common/models/Run'
 
 @Injectable({
     providedIn: 'root'
 })
 export class RouteService {
-    constructor(public http: HttpClient) { }
+    port: number = (1000);
+    host: string;
+    constructor(public http: HttpClient) {
+        this.host = `${location.protocol}//${location.hostname}:${this.port}/`;
+    }
     
     // getAllPanels(): any {
     //     return this.http.get(`${this.host}panel`);
@@ -19,9 +24,9 @@ export class RouteService {
     //     return this.http.get(`${this.host}panel/byName/${name}`);
     // }
 
-    // savePanel(data: any): any {
-    //     return this.http.post(`${this.host}panel`, data);
-    // }
+    compileAndExec(data: Run): any {
+        return this.http.post(`${this.host}dev/compile-and-exec`, data);
+    }
 
     // editPanel(data: any): any {
     //     return this.http.put(`${this.host}panel`, data);
