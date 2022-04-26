@@ -1,4 +1,8 @@
--- Cria tabela de usuários
+CREATE DATABASE UniDev
+
+USE UniDev
+
+-- Cria tabela de usuï¿½rios
 CREATE TABLE Users(
 	id int IDENTITY(1,1) NOT NULL,
 	name nvarchar(255) NOT NULL,
@@ -78,7 +82,7 @@ CONSTRAINT PK__ProblemTestParameters PRIMARY KEY CLUSTERED(id ASC) WITH (PAD_IND
 ALTER TABLE ProblemTestParameters WITH CHECK ADD CONSTRAINT FK__ProblemTestParameters__ProblemTests FOREIGN KEY(problemTestId) REFERENCES ProblemTests(id)
 
 
--- Cria tabela de problemas resolvidos por usuários
+-- Cria tabela de problemas resolvidos por usuï¿½rios
 CREATE TABLE ProblemResolved(
 	id int IDENTITY(1,1) NOT NULL,
 	problemId int NOT NULL,

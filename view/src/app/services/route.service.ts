@@ -6,23 +6,19 @@ import { Run } from '../../../../Common/models/Run'
     providedIn: 'root'
 })
 export class RouteService {
-    port: number = (1000);
+    port: number = (3000);
     host: string;
     constructor(public http: HttpClient) {
         this.host = `${location.protocol}//${location.hostname}:${this.port}/`;
     }
     
-    // getAllPanels(): any {
-    //     return this.http.get(`${this.host}panel`);
-    // }
+    getProblems(): any {
+        return this.http.get(`${this.host}problem`);
+    }
 
-    // getPanelById(id): any {
-    //     return this.http.get(`${this.host}panel/${id}`);
-    // }
-
-    // getPanelByName(name: string): any {
-    //     return this.http.get(`${this.host}panel/byName/${name}`);
-    // }
+    getProblemById(id: number): any {
+        return this.http.get(`${this.host}problem/${id}`);
+    }
 
     compileAndExec(data: Run): any {
         return this.http.post(`${this.host}dev/compile-and-exec`, data);

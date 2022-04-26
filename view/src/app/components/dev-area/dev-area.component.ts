@@ -1,8 +1,10 @@
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { DevThemes } from 'src/app/datas/dev-themes';
 import { RouteService } from 'src/app/services/route.service';
 import { ShareService } from 'src/app/services/share.service';
 import { DBResult } from '../../../../../Common/models/DBResult';
+import { Problem } from '../../../../../Common/models/Problem';
 import { Run } from '../../../../../Common/models/Run';
 
 declare var monaco: any;
@@ -14,7 +16,7 @@ let loadPromise: Promise<void>;
   templateUrl: './dev-area.component.html',
   styleUrls: ['./dev-area.component.scss']
 })
-export class DevAreaComponent implements OnInit, OnDestroy {
+export class DevAreaComponent implements OnInit, OnDestroy, AfterViewInit {
   displayedColumns: string[] = [ 'input', 'output' ];
   dataIO: any[] = [{ input: 1, output: 2}, { input: 3, output: 4}, { input: 5, output: 6}, { input: 7, output: 8}, { input: 9, output: 10}]
   editor: any;
@@ -23,17 +25,42 @@ export class DevAreaComponent implements OnInit, OnDestroy {
   timeView: string = '00:00:00';
   interval: any = null;
 
+  problem: Problem | null = null
+
   @ViewChild('editorContainer', { static: true }) editorContainer: ElementRef | undefined;
 
-  constructor(private share: ShareService, private cdRef: ChangeDetectorRef, private routeService: RouteService) { }
+  constructor(private share: ShareService, private cdRef: ChangeDetectorRef, private routeService: RouteService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.loadMonaco();
-    this.startTime();
+    // console.log('route>>>> ', this.route);
+  }
+  
+  ngAfterViewInit(): void {
+    this.route.params.subscribe(params => {
+      const id = params['id'];
+      if (!id) {
+        console.log('NÃO EXISTE ID, ERRO')
+        return;
+      }
+      this.routeService.getProblemById(id).subscribe((resultDb: DBResult) => {
+        if (!resultDb.data) {
+          console.log('IS NÃO ENCONTRADO, ERRO');
+          return;
+        }
+        this.problem = <any>resultDb.data;
+        this.loadComponents();
+      })
+    });
   }
 
   ngOnDestroy(): void {
     this.clearInterval();
+  }
+
+  loadComponents() {
+    this.loadMonaco();
+    this.startTime();
+    this.cdRef.detectChanges();
   }
 
   loadMonaco() {
@@ -69,7 +96,8 @@ export class DevAreaComponent implements OnInit, OnDestroy {
 
   initMonaco(options: any): void {
     this.editor = monaco.editor.create(this.editorContainer?.nativeElement, {
-      value: ['class ClassName {', '\tpublic static void main(String[] args) {', '\t\t', '\t}', '}'].join('\n'),
+      value: this.problem?.codeDefault || '',
+      // value: ['class ClassName {', '\tpublic static void main(String[] args) {', '\t\t', '\t}', '}'].join('\n'),
       language: 'java',
       automaticLayout: true
     });
@@ -87,7 +115,6 @@ export class DevAreaComponent implements OnInit, OnDestroy {
       const hours: any = Math.floor(this.timer / 3600); //get hours
       const minutes: any = Math.floor((this.timer - (hours * 3600)) / 60); //get minutes
       const seconds: any = this.timer - (hours * 3600) - (minutes * 60); //get seconds
-      console.log(hours, minutes, seconds);
       this.timeView = `${convert(hours)}:${convert(minutes)}:${convert(seconds)}`; //return is HH:MM:ss
     }, 1000);
   }

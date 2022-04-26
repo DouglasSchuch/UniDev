@@ -1,0 +1,11 @@
+const path = require('path');
+
+module.exports = {
+  config: path.resolve(__dirname, 'src', 'config', 'database.ts'),
+  'models-path': path.resolve(__dirname, 'src', 'config', 'models'),
+  'migrations-path': path.resolve(__dirname, 'src', 'config', 'migrations', 'v1'),
+  'seeders-path': process.env.NODE_ENV === 'development' ? 
+  path.resolve(__dirname, 'src', 'config', 'seeders/development') :
+  path.resolve(__dirname, 'src', 'config', 'seeders/test'),
+  debug: true
+};

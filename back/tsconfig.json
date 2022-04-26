@@ -1,18 +1,24 @@
 {
-    "compilerOptions": {
-      "target": "es5",
-      "module": "commonjs",
-      "outDir": "./dist",
-      "strict": true,
-      "noUnusedLocals": false,
-      "noUnusedParameters": false,
-      "noImplicitReturns": false,
-      "noFallthroughCasesInSwitch": true,
-      "esModuleInterop": true,
-      "experimentalDecorators": true,
-      "emitDecoratorMetadata": true,
-      "sourceMap": true
-    },
-  "include": [ "src/**/*", "../Common/**/*" ],
-    "exclude": ["node_modules", "**/*.test.ts"]
-  }
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*.ts", "../common/**/*", "src/config/database.js"],
+  "exclude": ["node_modules", "**/*.test.ts"]
+}

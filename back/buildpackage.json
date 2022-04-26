@@ -1,11 +1,21 @@
 {
-  "name": "SynecoReportsAPI",
-  "version": "1.0.0",
-  "description": "Responsavel por realizar as consultas no banco de dados",
-  "main": "syneco-reports-api/src/index.js",
-  "bin": "syneco-reports-api/src/index.js",
+  "name": "UniDev",
+  "version": "0.0.1",
+  "description": "UniDev API",
+  "main": "back/src/main.js",
+  "bin": "back/src/main.js",
   "pkg": {
-    "assets": "src/ChartsFunctions/**/*"
+    "scripts": [
+      "./**/*.js"
+    ],
+    "assets": [
+      "../node_modules/swagger-ui-dist/**/*.*",
+      "../node_modules/swagger-ui-express/**/*.*",
+      "../common/protos/plugin.proto"
+    ],
+    "targets": [
+      "node14-win-x64"
+    ]
   },
   "author": "SKA Ltda.",
   "license": "ISC"
