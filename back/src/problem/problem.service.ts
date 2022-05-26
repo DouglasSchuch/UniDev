@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Transaction } from 'sequelize';
+import { ProblemTestParameter } from 'src/problem-test-parameter/entities/problem-test-parameter.entity';
+import { ProblemTest } from 'src/problem-test/entities/problem-test.entity';
 import { Problem } from './entities/problem.entity';
 
 @Injectable()
@@ -25,7 +27,7 @@ export class ProblemService {
 
   async findOne(id: number, transaction: Transaction = null) {
     try {
-      return await this.problemModel.findByPk(id, { transaction });
+      return await this.problemModel.findByPk(id, { include: [{ model: ProblemTest, include: [ProblemTestParameter] }], transaction });
     } catch (err) {
       throw err;
     }

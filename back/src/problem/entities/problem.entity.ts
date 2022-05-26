@@ -1,6 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, MaxLength } from "class-validator";
-import { AutoIncrement, Column, CreatedAt, DataType, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
+import { AutoIncrement, BelongsTo, Column, CreatedAt, DataType, ForeignKey, HasMany, Model, PrimaryKey, Table, UpdatedAt } from "sequelize-typescript";
+import { ProblemTest } from "src/problem-test/entities/problem-test.entity";
+import { User } from "src/user/entities/user.entity";
 
 @Table({ tableName: 'Problems', modelName: 'Problems', timestamps: true })
 export class Problem extends Model<Problem> {
@@ -30,6 +32,7 @@ export class Problem extends Model<Problem> {
 
     @ApiProperty()
     @Column({ type: DataType.INTEGER, allowNull: false })
+    @ForeignKey(() => User)
     @IsNotEmpty({ message: 'createdUserId is required' })
     createdUserId: number;
 
@@ -41,18 +44,10 @@ export class Problem extends Model<Problem> {
     @UpdatedAt
     public updatedAt: Date;
 
-    // COLUNAS NÃO USADAS NO BANCO DE DADOS
-    // @Column({ type: DataType.VIRTUAL })
-    // isLimitCycle = false;
-
     // RELAÇÕES
-    // @HasMany(() => LoanUnitTool)
-    // loanUnitTools: LoanUnitTool[];
+    @HasMany(() => ProblemTest)
+    problemTests: ProblemTest[];
 
-    // @BelongsTo(() => Tool)
-    // tool: Tool;
-
-    // @HasMany(() => TagsUnitTool)
-    // //@HasMany(() => TagsUnitTool, { as: 'tags' })
-    // tagsUnitTool: TagsUnitTool[];
+    @BelongsTo(() => User)
+    createdUser: User;
 }

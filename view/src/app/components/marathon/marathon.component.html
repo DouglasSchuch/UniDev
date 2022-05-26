@@ -1,0 +1,60 @@
+<div *ngIf="marathon" class="mar-main">
+  <div class="mar-header">
+    <!-- Titulo -->
+    <div class="mar-title">
+      {{marathon.name}}
+    </div>
+
+    <!-- Descrição -->
+    <div class="mar-description">
+      {{marathon.description}}
+    </div>
+
+    <!-- Informações -->
+    <div class="mar-info">
+      <div class="mar-infos">
+        Duração: {{marathon.duration ? marathon.duration : '--'}}
+      </div>
+
+      <div style="display: flex; flex-direction: row; width: 200px; color: var(--text-color); align-items: center; padding: 0 10px;">
+        <button mat-button mat-raised class="button-default button-confirm" style="height: 30px; display: flex; align-items: center;" [ngClass]="!notResolved.length ? 'btn-enabled' : 'btn-disabled'" (click)="confirm()">Finalizar maratona</button>
+      </div>
+      
+      <div class="mar-infos">
+        Criado por: {{marathon.createdUser ? marathon.createdUser.name : '--'}}
+      </div>
+    </div>
+  </div>
+
+  <div fxFlex style="background-color: var(--color-800); border-radius: 8px; padding: 0 !important; margin-bottom: 100px !important; display: flex; flex-direction: column; height: 100%;">
+    <div class="mar-problem-title">Lista de problemas</div>
+
+    <div style="display: flex; height: 100%;">
+      <div fxFlex="50" style="background-color: var(--color-400); border-bottom-left-radius: 8px;">
+        <div class="mar-problem-resolved mar-not-resolved">Não resolvidos</div>
+        <mat-list *ngIf="marathon && notResolved.length" role="list" style="height: 100%; padding: 0 !important;">
+          <mat-list-item *ngFor="let problem of notResolved" style="color: var(--color-100); border-bottom: var(--color-100) solid 1px;">
+            <div style="display: flex; align-items: center; width: 100%;">
+              <div fxFlex>{{problem.name}}</div>
+              
+              <button mat-button mat-raised style="cursor: pointer; padding: 0 !important; min-width: 32px !important;" (click)="selectProblem(problem.id)">
+                <img [ngClass]="['ic-next', 'icon-big']"/>
+              </button>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </div>
+      
+      <div fxFlex="50" style="background-color: var(--color-500); border-bottom-right-radius: 8px;">
+        <div class="mar-problem-resolved mar-resolved">Resolvidos</div>
+        <mat-list *ngIf="marathon && resolved.length" role="list" style="height: 100%; padding: 0 !important;">
+          <mat-list-item *ngFor="let problem of resolved" style="color: var(--color-100); border-bottom: var(--color-100) solid 1px;">
+            <div style="display: flex; align-items: center; width: 100%;">
+              <div fxFlex>{{problem.name}}</div>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </div>
+  </div>
+</div>

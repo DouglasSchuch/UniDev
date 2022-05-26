@@ -1,7 +1,11 @@
+/* You can add global styles to this file, and also import other style files */
+@import './images.scss';
+
 html, body { height: 100%; overflow: hidden; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 :root {
+  --toolbar-top: #64B7CC;
   // --color-000: transparent;
   // --color-100: black !important;
   // --color-200: #717171 !important;
@@ -60,4 +64,14 @@ app-dev-area {
   background-color: #FF6869;
   color: #272727;
   font-weight: bold;
+}
+// html, body { height: 100%; }
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+  background-color: #88C982 !important;
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: rgba(136, 201, 130, .54) !important;
 }

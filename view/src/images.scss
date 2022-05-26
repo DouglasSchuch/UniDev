@@ -1,0 +1,87 @@
+.ic-next {
+  background-color: var(--icons-color);
+  mask: url(assets/icons/ic_next.svg) no-repeat center / contain;
+  -webkit-mask: url(assets/icons/ic_next.svg) no-repeat center / contain;
+}
+
+.ic-previous {
+  background-color: var(--icons-color);
+  mask: url(assets/icons/ic_previous.svg) no-repeat center / contain;
+  -webkit-mask: url(assets/icons/ic_previous.svg) no-repeat center / contain;
+}
+
+.ic-previous-toolbar {
+  background-color: white;
+  mask: url(assets/icons/ic_previous.svg) no-repeat center / contain;
+  -webkit-mask: url(assets/icons/ic_previous.svg) no-repeat center / contain;
+}
+
+.ic-show {
+  background-color: var(--icons-color);
+  mask: url(assets/icons/ic_show.svg) no-repeat center / contain;
+  -webkit-mask: url(assets/icons/ic_show.svg) no-repeat center / contain;
+}
+
+.ic-hide {
+  background-color: var(--icons-color);
+  mask: url(assets/icons/ic_hide.svg) no-repeat center / contain;
+  -webkit-mask: url(assets/icons/ic_hide.svg) no-repeat center / contain;
+}
+
+.ic-cancel {
+  background-color: var(--icons-color);
+  mask: url(assets/icons/ic_cancel.svg) no-repeat center / contain;
+  -webkit-mask: url(assets/icons/ic_cancel.svg) no-repeat center / contain;
+}
+
+.ic-info {
+  background-color: var(--icons-color);
+  mask: url(assets/icons/ic_info.svg) no-repeat center / contain;
+  -webkit-mask: url(assets/icons/ic_info.svg) no-repeat center / contain;
+}
+
+.ic-logout {
+  background-color: white;
+  mask: url(assets/icons/ic_logout.svg) no-repeat center / contain;
+  -webkit-mask: url(assets/icons/ic_logout.svg) no-repeat center / contain;
+}
+
+.icon-small {
+  width: 20px;
+  height: 20px;
+}
+
+.icon-xxx-small {
+  width: 12px;
+  height: 12px;
+}
+
+.icon-xx-small {
+  width: 15px;
+  height: 15px;
+}
+
+.icon-x-small {
+  width: 18px;
+  height: 18px;
+}
+
+.icon-medium {
+  width: 25px;
+  height: 25px;
+}
+
+.icon-big {
+  width: 32px;
+  height: 32px;
+}
+
+.icon-xx-big {
+  width: 53px;
+  height: 53px;
+}
+
+.icon-xxx-big {
+  width: 66px;
+  height: 66px;
+}

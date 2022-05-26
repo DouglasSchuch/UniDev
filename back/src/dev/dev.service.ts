@@ -1,5 +1,10 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Transaction } from 'sequelize';
+import { ProblemResolved } from 'src/problem-resolved/entities/problem-resolved.entity';
+import { ProblemResolvedService } from 'src/problem-resolved/problem-resolved.service';
+import { ProblemTest } from 'src/problem-test/entities/problem-test.entity';
+import { Problem } from 'src/problem/entities/problem.entity';
+import { ProblemService } from 'src/problem/problem.service';
 import { Run } from '../../../common/models/Run';
 
 const fs = require('fs');
@@ -8,7 +13,7 @@ const { spawn } = require('child_process');
 
 @Injectable()
 export class DevService {
-  constructor() {}
+  constructor(private problemService: ProblemService) {}
 
   // Compila arquivo
   // javac test.java
@@ -23,7 +28,6 @@ export class DevService {
   * @returns Promise<Loan>
   */
   async compileAndExec(run: Run) {
-      console.log('------> ', run);
       let path: string | null = process.env.PATH_EXEC || null;
       if (!path) {
           throw new Error('Path not defined');
@@ -32,39 +36,54 @@ export class DevService {
 
       const fileName: string = `test.java`;
       const code: string | null = run.code;
+//       const code: string | null = `class ClassName {
+//     public static void main(String[] args) {
+//         String value1 = args[0];
+//         String value2 = args[1];
+//         System.out.println(Integer.parseInt(value1) - Integer.parseInt(value2) - 5);
+//     }
+// }`;
       try {
-          if (!fs.existsSync(path)){
-              fs.mkdirSync(path, { recursive: true });
-          }
+        if (!fs.existsSync(path)){
+            fs.mkdirSync(path, { recursive: true });
+        }
 
-          // gera o arquivo
-          await this.writeFile(path, fileName, code);
+        // gera o arquivo
+        await this.writeFile(path, fileName, code);
 
-          // compila o código
-          await this.compile(path, fileName);
+        // compila o código
+        await this.compile(path, fileName);
 
-          // busca o nome do arquivo gerado na compilação
-          const classNames: string[] = this.findFileByExtension(path, 'class');
-          if (classNames.length !== 1) {
-              throw new Error('Internal error');
-          }
-          const className = classNames[0].split('.class')[0];
-          
-          // executa a classe compilada
-          const exec: any = await this.exec(path, className);
-          if (exec > 0) {
-              // detecta erro no arquivo gerado
-          }
-          // valida os resultados obtidos com os esperados
-          const isValid: boolean = await this.validateResults(path);
+        // busca o nome do arquivo gerado na compilação
+        const classNames: string[] = this.findFileByExtension(path, 'class');
+        if (classNames.length !== 1) {
+            throw new Error('Internal error');
+        }
+        const className = classNames[0].split('.class')[0];
+        
+        // consulta o problema que está sendo resolvido
+        const problem: Problem = await this.problemService.findOne(run.problemId);
 
-          // remove a pasta criada
-          // await fs.rmSync(`${path}\\exec`, { recursive: true, force: true });
-          // await fs.rmSync(path, { recursive: true, force: true });
+        // executa a classe compilada
+        const exec: boolean = await this.testCases(path, className, problem);
+        if (!exec) {
+            throw new Error('Rejeitado nos casos de teste');
+        }
 
-          return isValid;
+        const problemResolved: ProblemResolved = new ProblemResolved();
+        problemResolved.problemId = run.problemId;
+        problemResolved.resolvedMarathonId = run.marathonId;
+        problemResolved.userId = run.userId;
+        problemResolved.time = run.time;
+        problemResolved.save();
+
+        // remove a pasta criada
+        // await fs.rmSync(`${path}\\exec`, { recursive: true, force: true });
+        // await fs.rmSync(path, { recursive: true, force: true });
+
+        return true;
       } catch (err) {
-          throw err;
+        throw err;
       }
   }
 
@@ -116,51 +135,71 @@ export class DevService {
       });
   }
 
-  /**
-  * Executa um arquivo .class
-  * @param {string} path diretório que está o .class que será executado
-  * @param {string} className nome da classe Java
-  * @returns Promise<any>
-  */
-  async exec(path: string, className: string): Promise<any> {
-      if (!fs.existsSync(`${path}\\exec`)){
-          await fs.mkdirSync(`${path}\\exec`, { recursive: true });
-      }
-      const out = fs.openSync(`${path}\\exec\\out.log`, 'a');
-      const err = fs.openSync(`${path}\\exec\\err.log`, 'a');
-      return new Promise<any>((resolve, reject) => {
-          const java = spawn(`java`, ['-cp', path, className], { stdio: ['ignore', out, err] });
+    async testCases(path: string, className: string, problem: Problem | null = null): Promise<any> {
+        if (problem?.problemTests?.length) {
+            for (let i = 0; i < problem.problemTests.length; i++) {
+                const problemTest: ProblemTest = problem.problemTests[i];
+                const completePath: string = `${path}\\exec\\${i}`;
+                
+                if (!fs.existsSync(completePath)){
+                    await fs.mkdirSync(completePath, { recursive: true });
+                }
+                const out = fs.openSync(`${completePath}\\out.log`, 'a');
+                const err = fs.openSync(`${completePath}\\err.log`, 'a');
 
-          java.on('exit', (code: any) => resolve(code));
-          
-          java.on('error', (err: any) => reject(err));
-      });
-  }
+                const parameters: any[] = ['-cp', path, className];
+
+                if (problemTest.problemTestParameters?.length) {
+                    for (let j = 0; j < problemTest.problemTestParameters.length; j++) {
+                        parameters.push(problemTest.problemTestParameters[j].value);
+                    }
+                }
+
+                const isValid: boolean = await this.exec(parameters, out, err, completePath, problemTest.result);
+                if (!isValid) {
+                    console.log('ERRO COMPARAÇÃO!!!!!');
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+    * Executa um arquivo .class com os casos de teste
+    * @returns Promise<boolean>
+    */
+    async exec(parameters: any[], out, err, completePath: string, result: string) {
+        return new Promise<any>(async (resolve) => {
+            const java = spawn(`java`, parameters, { stdio: ['ignore', out, err] });
+
+            java.on('exit', async (code: any) => resolve(await this.validateResults(completePath, result)));
+            
+            java.on('error', (err: any) => resolve(false));
+        });
+    }
 
   /**
   * Valida os resultados obtidos
   * @param {string} path diretório principal
   * @returns Promise<boolean>
   */
-  async validateResults(path: string): Promise<boolean> {
+  async validateResults(path: string, value: string): Promise<boolean> {
       try {
-          // if (!fs.existsSync(`${path}\\results`)){
-          //     fs.mkdirSync(`${path}\\results`, { recursive: true });
-          // }
-          const contentErr: string = (await fs.readFileSync(`${path}\\exec\\err.log`)).toString();
-          if (contentErr !== '') {
-              throw contentErr;
-          }
-          const valuesDatabase: string[] = ['Hello, World!'];
-          for (let i = 0; i < valuesDatabase.length; i++) {
-              const content: string = (await fs.readFileSync(`${path}\\exec\\out.log`)).toString().trim();
-              if (content !== valuesDatabase[i].trim()) {
-                  return false;
-              }
-          }
-          return true;
+            // if (!fs.existsSync(`${path}\\results`)){
+            //     fs.mkdirSync(`${path}\\results`, { recursive: true });
+            // }
+            const contentErr: string = (await fs.readFileSync(`${path}\\err.log`)).toString();
+            if (contentErr !== '') {
+                throw contentErr;
+            }
+            const content: string = (await fs.readFileSync(`${path}\\out.log`)).toString().trim();
+            if (content !== value.trim()) {
+                return false;
+            }
+            return true;
       } catch (err) {
-          throw err;
+            throw err;
       }
   }
 

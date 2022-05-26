@@ -9,6 +9,8 @@ CREATE TABLE Users(
 	username nvarchar(255) NOT NULL,
 	email nvarchar(100) NULL,
 	course nvarchar(100) NULL,
+	university nvarchar(255) NULL,
+	city nvarchar(255) NULL,
 	password nvarchar(max) NOT NULL,
 	isActive bit DEFAULT 1,
 	createdAt datetimeoffset(7) NOT NULL,
@@ -39,6 +41,7 @@ CREATE TABLE Marathons(
 	description nvarchar(max) NULL,
 	duration int NULL,
 	password nvarchar(max) NULL,
+	isActive bit DEFAULT 1 NOT NULL,
 	createdUserId int NOT NULL,
 	createdAt datetimeoffset(7) NOT NULL,
 	updatedAt datetimeoffset(7) NOT NULL,
@@ -95,6 +98,19 @@ CONSTRAINT PK__ProblemResolved PRIMARY KEY CLUSTERED(id ASC) WITH (PAD_INDEX = O
 ALTER TABLE ProblemResolved WITH CHECK ADD CONSTRAINT FK__ProblemResolved__Problems FOREIGN KEY(problemId) REFERENCES Problems(id)
 ALTER TABLE ProblemResolved WITH CHECK ADD CONSTRAINT FK__ProblemResolved__Users FOREIGN KEY(userId) REFERENCES Users(id)
 ALTER TABLE ProblemResolved WITH CHECK ADD CONSTRAINT FK__ProblemResolved__Marathons FOREIGN KEY(resolvedMarathonId) REFERENCES Marathons(id)
+
+
+-- Cria tabela de maratonas resolvidas por usu�rios
+CREATE TABLE MarathonResolved(
+	id int IDENTITY(1,1) NOT NULL,
+	marathonId int NOT NULL,
+	userId int NOT NULL,
+	time int NOT NULL DEFAULT 0,
+	createdAt datetimeoffset(7) NOT NULL,
+	updatedAt datetimeoffset(7) NOT NULL,
+CONSTRAINT PK__MarathonResolved PRIMARY KEY CLUSTERED(id ASC) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]) ON [PRIMARY]
+ALTER TABLE MarathonResolved WITH CHECK ADD CONSTRAINT FK__MarathonResolved__Marathons FOREIGN KEY(marathonId) REFERENCES Marathons(id)
+ALTER TABLE MarathonResolved WITH CHECK ADD CONSTRAINT FK__MarathonResolved__Users FOREIGN KEY(userId) REFERENCES Users(id)
 
 
 

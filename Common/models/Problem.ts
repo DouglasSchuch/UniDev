@@ -1,3 +1,5 @@
+import { ProblemTest } from "./ProblemTest";
+
 export class Problem {
     id: number;
     name: string;
@@ -7,6 +9,9 @@ export class Problem {
     createdUserId: number;
     createdAt: Date | null = null;
     updateAt: Date | null = null;
+
+    problemTests: ProblemTest[] = []
+    __time: string | null = null;
 
     constructor(id: number, name: string, description: string, codeDefault: string, isActive: boolean, createdUserId: number){
         this.id = id;

@@ -1,0 +1,85 @@
+.mar-main {
+    display: flex;
+    flex-direction: column;
+    padding: 0 300px;
+    background-color: var(--color-600);
+    height: 100%;
+}
+
+.mar-header {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 10px;
+}
+
+.mar-title {
+    display: flex;
+    font-size: 24px;
+    font-weight: bold;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 15px;
+    color: var(--color-100);
+}
+
+.mar-description {
+    display: flex;
+    font-size: 16px;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 15px;
+    color: var(--color-100);
+}
+
+.mar-info {
+    display: flex;
+    font-size: 16px;
+    justify-content: center;
+    width: 100%;
+}
+
+.mar-infos {
+    display: flex;
+    font-size: 16px;
+    justify-content: center;
+    width: 100%;
+    color: var(--color-100);
+}
+
+.mar-problem-title {
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    background-color: var(--color-900);
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    padding: 5px 0;
+    color: var(--color-100);
+}
+
+.mar-problem-resolved {
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    background-color: var(--color-900);
+    padding: 5px 0;
+    color: white;
+}
+
+.mar-resolved {
+    background-color: #86CE84;
+}
+
+.mar-not-resolved {
+    background-color: #FF6869;
+}
+
+.btn-enabled {
+    cursor: pointer;
+    opacity: 1;
+}
+
+.btn-disabled {
+    cursor: auto;
+    opacity: 0.4;
+}

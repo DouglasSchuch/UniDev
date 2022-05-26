@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 
@@ -10,23 +10,16 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatSelectModule } from '@angular/material/select';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatInputModule } from '@angular/material/input';
-import { MatTableModule } from '@angular/material/table';
-
 import { DevAreaComponent } from '../app/components/dev-area/dev-area.component'
+import { MarathonComponent } from '../app/components/marathon/marathon.component'
 import { HomeComponent } from '../app/components/home/home.component'
 import { LoginComponent } from '../app/components/login/login.component'
 import { AuthHeaderInterceptor } from './http-interceptors/auth-header-interceptor';
+import { GeneralService } from './services/general.service';
+import { MaterialModule } from './material.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouteService } from './services/route.service';
+import { ReactiveFormsModule } from '@angular/forms';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -36,35 +29,28 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     DevAreaComponent,
+    MarathonComponent,
     HomeComponent,
     LoginComponent
   ],
   imports: [
+    MaterialModule,
     FlexLayoutModule,
     HttpClientModule,
-    MatDialogModule,
-    MatTooltipModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatButtonToggleModule,
-    MatMenuModule,
-    MatSelectModule,
-    MatTabsModule,
-    MatProgressSpinnerModule,
-    MatProgressBarModule,
-    MatInputModule,
-    MatTableModule,
     BrowserModule,
     AppRoutingModule,
+    ReactiveFormsModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    })
+    }),
+    BrowserAnimationsModule
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthHeaderInterceptor, multi: true }],
-  bootstrap: [AppComponent]
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: AuthHeaderInterceptor, multi: true }, GeneralService, RouteService],
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

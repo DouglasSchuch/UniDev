@@ -1,24 +1,85 @@
 <div style="display: flex; height: calc(100% - 45px); padding: 50px 100px; background-color: var(--color-1000);">
     <!-- Perfil -->
-    <div class="profile">
+    <div class="profile" *ngIf="general.user">
         <div fxFlex="20" style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-            <div class="circle">DS</div>
+            <div class="circle">{{avatarName}}</div>
         </div>
-        <div class="identification username">{{'@' + app.initialLoad.user.username}}</div>
-        <div class="identification">{{app.initialLoad.user.name + (app.initialLoad.user.age ? (', ' + app.initialLoad.user.age) : '')}}</div>
-        <div class="identification">{{app.initialLoad.user.email}}</div>
-        <div class="identification">{{app.initialLoad.user.city}}</div>
-        <div class="identification">{{app.initialLoad.user.course}}</div>
-        <div class="identification">{{app.initialLoad.user.university}}</div>
+        <div *ngIf="general.user.username" class="identification username">{{'@' + general.user.username}}</div>
+        <div *ngIf="general.user.name" class="identification">{{general.user.name}}</div>
+        <div *ngIf="general.user.email" class="identification">{{general.user.email}}</div>
+        <div *ngIf="general.user.city" class="identification">{{general.user.city}}</div>
+        <div *ngIf="general.user.course" class="identification">{{general.user.course}}</div>
+        <div *ngIf="general.user.university" class="identification">{{general.user.university}}</div>
     </div>
 
     <!-- Módulos -->
-    <div fxFlex>
+    <div fxFlex style="flex-direction: column; padding: 0 100px !important;">
+        <div style="display: flex; height: 150px; margin-bottom: 40px;">
+            <div class="hom-card" style="margin-right: 25px;">
+                <div style="color: var(--color-100); font-size: 24px;">PROBLEMAS RESOLVIDOS</div>
+                <div fxFlex style="color: var(--color-100); font-size: 72px; height: 100%; display: flex; align-items: center;">{{problemsResolved.length}}</div>
+            </div>
+            
+            <div class="hom-card" style="margin-left: 25px;">
+                <div style="color: var(--color-100); font-size: 24px;">MARATONAS RESOLVIDAS</div>
+                <div fxFlex style="color: var(--color-100); font-size: 72px; height: 100%; display: flex; align-items: center;">{{marathonsResolved.length}}</div>
+            </div>
+        </div>
 
+        <div fxFlex style="display: flex; height: 70%;">
+            <div fxFlex="50">
+                <mat-slide-toggle style="color: var(--color-100); margin-bottom: 10px;" (change)="onProblemToggle($event.checked)">Exibir apenas problemas resolvidos</mat-slide-toggle>
+                <div class="hom-list" style="margin-right: 25px; height: 100%;">
+                    <div class="hom-title-list">PROBLEMAS DISPONÍVEIS</div>
+                    <mat-list *ngIf="problems.length" role="list" style="height: 100%; padding: 0 !important;">
+                        <mat-list-item *ngFor="let problem of problems" style="color: var(--color-100); border-bottom: var(--color-100) solid 1px;">
+                            <div style="display: flex; align-items: center; width: 100%;">
+                                <div fxFlex>{{problem.name}}</div>
+                          
+                                <button *ngIf="onlyProblemResolved" mat-button mat-raised style="cursor: pointer; padding: 0 !important; min-width: 32px !important;" [matTooltip]="'Resolvido em: ' + problem.__time">
+                                    <img [ngClass]="['ic-info', 'icon-big']"/>
+                                </button>
+                          
+                                <button *ngIf="!onlyProblemResolved" mat-button mat-raised style="cursor: pointer; padding: 0 !important; min-width: 32px !important;" (click)="clickProblem(problem.id)">
+                                    <img [ngClass]="['ic-next', 'icon-big']"/>
+                                </button>
+                            </div>
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+            </div>
+            
+            <div fxFlex="50">
+                <mat-slide-toggle style="margin: 0 0 10px 25px; color: var(--color-100);" (change)="onMarathonToggle($event.checked)">Exibir apenas maratonas resolvidas</mat-slide-toggle>
+                <div class="hom-list" style="margin-left: 25px; height: 100%;">
+                    <div class="hom-title-list">MARATONAS DISPONÍVEIS</div>
+                    <mat-list *ngIf="marathons.length" role="list" style="height: 100%; padding: 0 !important;">
+                        <mat-list-item *ngFor="let marathon of marathons" style="color: var(--color-100); border-bottom: var(--color-100) solid 1px;">
+                            <div style="display: flex; align-items: center; width: 100%;">
+                                <div fxFlex>{{marathon.name}}</div>
+                          
+                                <button *ngIf="onlyMarathonResolved" mat-button mat-raised style="cursor: pointer; padding: 0 !important; min-width: 32px !important;" [matTooltip]="'Resolvido em: ' + marathon.__time">
+                                    <img [ngClass]="['ic-info', 'icon-big']"/>
+                                </button>
+                          
+                                <button *ngIf="!onlyMarathonResolved" mat-button mat-raised style="cursor: pointer; padding: 0 !important; min-width: 32px !important;" (click)="clickMarathon(marathon.id)">
+                                    <img [ngClass]="['ic-next', 'icon-big']"/>
+                                </button>
+                            </div>
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+            </div>
+        </div>
+
+        <div style="height: 1px;"></div>
     </div>
 
     <!-- Rankings -->
-    <div style="display: flex; flex-direction: column; max-width: 300px; min-width: 200px;">
-
+    <div class="hom-ranking">
+        <div class="hom-ranking-title">Ranking</div>
+        <div fxFlex style="text-align: center; padding-top: 20px; color: var(--color-100);">
+            Em desenvolvimento
+        </div>
     </div>
 </div>

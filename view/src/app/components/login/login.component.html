@@ -1,0 +1,32 @@
+<div style="display: flex; height: 100%; width: 100%; justify-content: center; align-items: center; background-color: var(--toolbar-top); flex-direction: column;">
+    <div style="background-color:whitesmoke; height: 380px; width: 350px; border-radius: 15px; box-shadow: 0 0 1em white ;">
+        <div style="display: flex; width: 100%; justify-content: center; margin: 15px 0;">
+            <img src="../../../assets/icons/ic_unidev.png">
+        </div>
+
+        <form *ngIf="form" [formGroup]="form" style="display: flex; flex-direction: column; padding: 15px 20px;" novalidate>
+            <mat-form-field appearance="outline">
+                <mat-label>Usuário</mat-label>
+                <input matInput placeholder="Usuário" formControlName="username" (keyup.enter)="onLogin()">
+                <mat-icon matSuffix>person icon</mat-icon>
+            </mat-form-field>
+        
+            <mat-form-field appearance="outline">
+                <mat-label>Senha</mat-label>
+                <input matInput placeholder="Senha" [type]="hidePassword ? 'text' : 'password'" formControlName="password" (keyup.enter)="onLogin()">
+                <button mat-icon-button matSuffix class="btn-pass" (click)="onVisiblePassword($event)" [attr.aria-pressed]="hidePassword">
+                    <mat-icon>{{hidePassword ? 'visibility' : 'visibility_off'}}</mat-icon>
+                </button>
+            </mat-form-field>
+
+            <div style="height: 20px; text-align: center; color: #FF6869;">
+                {{errMessage}}
+            </div>
+            
+            <div style="display: flex; flex-direction: column; margin-top: 15px;">
+                <button mat-button type="button" style="background-color: var(--toolbar-top); color: white; width: 100%; margin-bottom: 5px;" (click)="onLogin()">Entrar</button>
+                <!-- <button mat-button type="button" style="color: var(--toolbar-top); width: 100%;" (click)="onRegister()">Cadastrar</button> -->
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,4 +1,9 @@
+import { Location } from '@angular/common';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { DBResult } from '../../../Common/models/DBResult';
+import { GeneralService } from './services/general.service';
+import { RouteService } from './services/route.service';
 import { ShareService } from './services/share.service';
 
 @Component({
@@ -8,22 +13,9 @@ import { ShareService } from './services/share.service';
 })
 export class AppComponent implements OnInit {
   title = 'UniDev';
-  initialLoad: any = {
-    theme: 'dark',
-    user: {
-      name: 'Douglas Schuch'
-      , username: 'DouglasSchuch'
-      , age: '25'
-      , email: 'douglasschuch2@gmail.com'
-      , password: '123'
-      , city: 'Novo Hamburgo'
-      , course: 'Sistemas de Informação'
-      , university: 'UNISINOS'
-    }
-  };
+  hideBackBtn: boolean = false;
   themes: any = {
     light: {
-      '--toolbar-top': '#64B7CC',
       '--color-000': 'transparent',
       '--color-100': 'black',
       '--color-200': '#717171',
@@ -39,7 +31,6 @@ export class AppComponent implements OnInit {
       '--icons-color': 'var(--color-100)'
       }
     , dark: {
-      '--toolbar-top': '#64B7CC',
       '--color-000': 'transparent',
       '--color-100': 'white',
       '--color-200': '#D2D2D2',
@@ -56,18 +47,52 @@ export class AppComponent implements OnInit {
     }
   }
 
-  constructor(private cdRef: ChangeDetectorRef, private share: ShareService) { }
+  constructor(
+    private cdRef: ChangeDetectorRef
+    , private share: ShareService
+    , public general: GeneralService
+    , private router: Router
+    , private location: Location
+    , private routeService: RouteService
+  ) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        const url = event.urlAfterRedirects;
+        this.hideBackBtn = ['', '/', '/home'].includes(url);
+        if (!this.hideBackBtn) {
+          console.log('ALTERAÇÕES SERÃO PERDIDAS')
+        }
+      }
+    })
+  }
 
   ngOnInit(): void {
-    this.changeTheme(this.initialLoad.theme);
+    this.changeTheme(this.general.theme);
+    const username = this.general.getCookie('LOGIN_USER');
+    if (username) {
+      this.routeService.getUserByUserName(username).subscribe((resultDb: DBResult) => {
+        if (resultDb.validated && resultDb.data.length) {
+          this.general.user = resultDb.data[0];
+        }
+      });
+    }
   }
 
   changeTheme(theme: string) {
     for (let prop in this.themes[theme]) {
       document.documentElement.style.setProperty(prop, this.themes[theme][prop]);
     }
-    this.initialLoad.theme = theme;
+    this.general.theme = theme;
     this.share.changeTheme(theme);
     this.cdRef.detectChanges();
+  }
+
+  onBackPage() {
+    this.location.back();
+  }
+
+  onLogout() {
+    this.general.user = null;
+    this.general.removeCookie('LOGIN_USER');
   }
 }

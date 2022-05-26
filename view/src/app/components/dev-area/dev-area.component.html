@@ -2,37 +2,65 @@
   <!-- Coluna a esquerda -->
   <div *ngIf="problem" style="display: flex; flex-direction: column; width: 30%; border-right: 1px solid var(--color-700);">
       <!-- Área de descrição do problema -->
-      <div fxFlex style="height: 100%; padding: 12px; background-color: var(--color-800);">
+      <div fxFlex="70" style="height: 100%; padding: 12px; background-color: var(--color-800); overflow: auto;">
           <div style="font-size: 22px; font-weight: bold; text-align: center; color: var(--text-color)">{{problem.name}}</div>
-          <div class="description-font">{{problem.description}}</div>
+          <p class="description-font" style="white-space: pre-line;">{{problem.description}}</p>
 
-          <table *ngIf="false" mat-table [dataSource]="dataIO" class="mat-elevation-z8">
-            <!-- Entrada -->
-            <ng-container matColumnDef="input">
-              <th mat-header-cell *matHeaderCellDef class="description-font">Entrada</th>
-              <td mat-cell *matCellDef="let element" class="description-font"> {{element.input}} </td>
+          <div *ngIf="problemTests.length" style="font-size: 20px; background-color: var(--color-1000); color: var(--color-100); text-align: center; padding: 10px 10px; margin-top: 25px;">
+            <div style="display: flex; flex-direction: row;">
+              <div fxFlex>Casos de teste</div>
+              <div style="width: 32px; display: flex; align-items: center; cursor: pointer;" (click)="onShowOrHide()">
+                <img *ngIf="isShow" [ngClass]="['ic-show', 'icon-medium']"/>
+                <img *ngIf="!isShow" [ngClass]="['ic-hide', 'icon-medium']"/>
+              </div>
+            </div>
+            <ng-container *ngIf="isShow">
+              <div *ngFor="let test of problemTests" style="background-color: var(--color-900); padding: 10px 10px; margin-top: 10px;">
+                <div style="font-size: 16px; color: var(--color-100); width: 100%; text-align: center; margin-bottom: 10px;">
+                  Parâmetros de entrada:
+                </div>
+    
+                <table mat-table [dataSource]="test.parameters" class="mat-elevation-z8">
+                  <!-- Índice arg -->
+                  <ng-container matColumnDef="index">
+                    <th mat-header-cell *matHeaderCellDef class="description-font">Índice arg</th>
+                    <td mat-cell *matCellDef="let element" class="description-font"> {{element.index}} </td>
+                  </ng-container>
+                
+                  <!-- Valor arg -->
+                  <ng-container matColumnDef="value">
+                    <th mat-header-cell *matHeaderCellDef class="description-font">Valor arg</th>
+                    <td mat-cell *matCellDef="let element" class="description-font"> {{element.value}} </td>
+                  </ng-container>
+      
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns" style="height: 38px !important"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: 38px !important"></tr>
+                </table>
+                <div style="font-size: 16px; color: var(--color-100); display: flex; flex-direction: row-reverse; margin: 10px 10px 0 10px;">
+                  Valor esperado: {{test.result}}
+                </div>
+              </div>
             </ng-container>
-          
-            <!-- Saída -->
-            <ng-container matColumnDef="output">
-              <th mat-header-cell *matHeaderCellDef class="description-font">Saida</th>
-              <td mat-cell *matCellDef="let element" class="description-font"> {{element.output}} </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns" style="height: 38px !important"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: 38px !important"></tr>
-          </table>
+          </div>
       </div>
       
       <!-- Área do console -->
-      <div fxFlex="30" style="height: 100%; color: var(--text-color); background-color: var(--color-900);">
-          AREA 2
+      <div fxFlex style="height: 100%; color: var(--text-color); background-color: var(--color-900); display: flex; flex-direction: column;">
+          <div style="height: 32px; border-bottom: var(--color-100) solid 1.5px; display: flex; flex-direction: row; align-items: center; padding: 0 10px;">
+            <div fxFlex>CONSOLE</div>
+            <div style="width: 15px; display: flex; align-items: center; cursor: pointer;" (click)="onClearConsole()">
+              <img *ngIf="consoleText" [ngClass]="['ic-cancel', 'icon-xx-small']"/>
+            </div>
+          </div>
+          <div fxFlex style="width: 100%;">
+            <textarea #console style="resize: none; width: 100%; height: 100%; background-color: var(--color-900); border: none; color: var(--color-100); scroll-behavior: auto;" disabled>{{consoleText}}</textarea>
+          </div>
       </div>
       
       <!-- Área de confirmação -->
       <div style="display: flex; flex-direction: row; height: 45px; color: var(--text-color); background-color: var(--color-1000); align-items: center; padding: 0 10px;">
         <span fxFlex>{{timeView}}</span>
-        <button mat-button mat-raised class="button-default button-cancel" style="height: 30px; margin-right: 10px; display: flex; align-items: center;">Cancelar</button>
+        <!-- <button mat-button mat-raised class="button-default button-cancel" style="height: 30px; margin-right: 10px; display: flex; align-items: center;">Cancelar</button> -->
         <button mat-button mat-raised class="button-default button-confirm" style="height: 30px; display: flex; align-items: center;" (click)="confirm()">Confirmar</button>
       </div>
   </div>
