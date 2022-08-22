@@ -3,7 +3,7 @@
   "sourceRoot": "src",
   "entryFile": "back/src/main",
   "compilerOptions": {
-    "assets": ["**/*.proto"],
+    "assets": [],
     "watchAssets": true
   }
 }

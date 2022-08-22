@@ -10,8 +10,7 @@
     ],
     "assets": [
       "../node_modules/swagger-ui-dist/**/*.*",
-      "../node_modules/swagger-ui-express/**/*.*",
-      "../common/protos/plugin.proto"
+      "../node_modules/swagger-ui-express/**/*.*"
     ],
     "targets": [
       "node14-win-x64"

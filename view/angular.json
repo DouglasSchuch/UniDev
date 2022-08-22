@@ -6,7 +6,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "UniDe": {
+    "UniDev": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -20,7 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/UniDe",
+            "outputPath": "dist/UniDev",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -77,10 +77,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "UniDe:build:production"
+              "browserTarget": "UniDev:build:production"
             },
             "development": {
-              "browserTarget": "UniDe:build:development"
+              "browserTarget": "UniDev:build:development"
             }
           },
           "defaultConfiguration": "development"

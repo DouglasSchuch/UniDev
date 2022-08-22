@@ -178,9 +178,9 @@ export class DevAreaComponent implements OnInit, OnDestroy, AfterViewInit {
       this.routeService.compileAndExec(new Run(this.editor.getValue(), 1, this.problem.id, this.timer, marathonId))
       .subscribe((resultDb: DBResult) => {
         this.consoleText += 'Sucesso\n';
-        setTimeout(() => {
-          this.app.onBackPage();
-        }, 1500)
+        // setTimeout(() => {
+        //   this.app.onBackPage();
+        // }, 1500)
       }, (err: any) => {
         this.consoleText = this.consoleText || '';
         this.consoleText += (err.error.message || err.error.data) + '\n'

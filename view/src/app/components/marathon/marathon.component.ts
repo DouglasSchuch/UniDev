@@ -62,7 +62,7 @@ export class MarathonComponent implements OnInit, OnDestroy, AfterViewInit {
     this.marathon = new Marathon(data.id, data.name, data.description, data.createdUserId, data.duration, data.password, data.isActive);
     this.marathon.createdUser = data.createdUser || null;
     if (this.general.user) {
-      this.routeService.getMarathonByUserProblemsStatus(data.id, this.general.user.id).subscribe((resultDb: DBResult) => {
+      this.routeService.getMarathonByUserProblemsStatus(this.general.user.id, data.id).subscribe((resultDb: DBResult) => {
         if (!resultDb.data?.length) {
           // não encontrado
         }
